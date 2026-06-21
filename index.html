@@ -2,88 +2,258 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>五重祝福打卡123</title>
+  <title>五重祝福打卡</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
+      min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 24px;
-      line-height: 1.5;
+      background: #f6f7f9;
+      color: #1f2937;
     }
 
-    .card {
-      max-width: 420px;
+    .page {
+      max-width: 480px;
       margin: 0 auto;
-      padding: 24px;
-      border: 1px solid #ddd;
-      border-radius: 16px;
+      padding: 24px 16px 40px;
     }
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-
-    #status {
-      color: #666;
+    .header {
       margin-bottom: 20px;
     }
 
-    button {
-      width: 100%;
-      padding: 14px 16px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      background: #06c755;
-      color: white;
-      cursor: pointer;
+    .eyebrow {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 6px;
     }
 
-    button:disabled {
-      opacity: 0.5;
+    h1 {
+      font-size: 28px;
+      line-height: 1.25;
+      margin: 0;
+      color: #111827;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .user-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .status {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .button-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .checkin-button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      background: #06c755;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .checkin-button:disabled {
+      opacity: 0.55;
       cursor: not-allowed;
     }
 
-    pre {
-      margin-top: 20px;
+    .checkin-button.done {
+      background: #d1d5db;
+      color: #374151;
+    }
+
+    .button-title {
+      display: block;
+    }
+
+    .button-subtitle {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .button-state {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+
+    .message {
+      margin-top: 16px;
       padding: 12px;
       border-radius: 12px;
-      background: #f6f6f6;
-      overflow: auto;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .message.success {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1 id="title">載入中...</h1>
-    <div id="status">正在初始化 LINE 登入</div>
+  <main class="page">
+    <section class="header">
+      <div class="eyebrow">五重祝福</div>
+      <h1>今日打卡</h1>
+    </section>
 
-    <button id="submitButton" disabled>
-      寫入 Google Sheet
-    </button>
+    <section class="card">
+      <div class="user-row">
+        <img id="avatar" class="avatar" alt="" />
+        <div>
+          <div id="userName" class="user-name">載入中...</div>
+          <div id="status" class="status">正在初始化 LINE 登入</div>
+        </div>
+      </div>
 
-    <pre id="result"></pre>
-  </div>
+      <div class="button-list">
+        <button class="checkin-button" data-type="morningPrayer" disabled>
+          <span>
+            <span class="button-title">晨禱</span>
+            <span class="button-subtitle">完成今日晨禱</span>
+          </span>
+          <span class="button-state">打卡</span>
+        </button>
+
+        <button class="checkin-button" data-type="prayerMeeting" disabled>
+          <span>
+            <span class="button-title">禱告會</span>
+            <span class="button-subtitle">參加禱告會</span>
+          </span>
+          <span class="button-state">打卡</span>
+        </button>
+
+        <button class="checkin-button" data-type="smallGroup" disabled>
+          <span>
+            <span class="button-title">小家</span>
+            <span class="button-subtitle">參加小家聚會</span>
+          </span>
+          <span class="button-state">打卡</span>
+        </button>
+
+        <button class="checkin-button" data-type="sunday" disabled>
+          <span>
+            <span class="button-title">主日</span>
+            <span class="button-subtitle">參加主日聚會</span>
+          </span>
+          <span class="button-state">打卡</span>
+        </button>
+
+        <button class="checkin-button" data-type="trainingSystem" disabled>
+          <span>
+            <span class="button-title">培育系統</span>
+            <span class="button-subtitle">完成培育相關項目</span>
+          </span>
+          <span class="button-state">打卡</span>
+        </button>
+      </div>
+
+      <div id="message" class="message">請稍候...</div>
+    </section>
+
+    <div class="footer">
+      若打卡失敗，請重新開啟頁面再試一次。
+    </div>
+  </main>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <script>
+
     const LIFF_ID = '2010462217-tVZRATTG';
     const API_URL = 'https://script.google.com/macros/s/AKfycbyPgSG_YrN-pr5VGCRMHSGzuyIQ0Prc8H7R8QPVe3QSZnCm7jewBXKNZE6nal4_sXBl/exec';
 
     let idToken = null;
+    let profile = null;
+    let isSubmitting = false;
 
-    const titleEl = document.getElementById('title');
+    const userNameEl = document.getElementById('userName');
+    const avatarEl = document.getElementById('avatar');
     const statusEl = document.getElementById('status');
-    const resultEl = document.getElementById('result');
-    const submitButton = document.getElementById('submitButton');
+    const messageEl = document.getElementById('message');
+    const buttons = Array.from(document.querySelectorAll('.checkin-button'));
+
+    const blessingLabels = {
+      morningPrayer: '晨禱',
+      prayerMeeting: '禱告會',
+      smallGroup: '小家',
+      sunday: '主日',
+      trainingSystem: '培育系統'
+    };
 
     async function main() {
       try {
+        setMessage('正在登入 LINE...', 'normal');
+
         await liff.init({ liffId: LIFF_ID });
 
         if (!liff.isLoggedIn()) {
@@ -91,27 +261,53 @@
           return;
         }
 
-        const profile = await liff.getProfile();
+        profile = await liff.getProfile();
         idToken = liff.getIDToken();
 
         if (!idToken) {
-          throw new Error('拿不到 LINE ID token，請確認 LIFF scope 有選 openid');
+          throw new Error('拿不到 LINE ID token，請確認 LIFF scope 有勾選 openid');
         }
 
-        titleEl.textContent = `Hello, ${profile.displayName}`;
-        statusEl.textContent = 'LINE 登入成功，可以寫入 Google Sheet';
-        submitButton.disabled = false;
+        userNameEl.textContent = `Hello, ${profile.displayName}`;
+        statusEl.textContent = '請選擇今天完成的項目';
+
+        if (profile.pictureUrl) {
+          avatarEl.src = profile.pictureUrl;
+        }
+
+        enableButtons();
+        restoreLocalDoneState();
+
+        setMessage('登入成功，可以開始打卡。', 'success');
 
       } catch (error) {
-        titleEl.textContent = '發生錯誤';
-        statusEl.textContent = String(error);
+        userNameEl.textContent = '登入失敗';
+        statusEl.textContent = '請重新開啟頁面';
+        setMessage(String(error), 'error');
       }
     }
 
-    submitButton.addEventListener('click', async () => {
-      submitButton.disabled = true;
-      statusEl.textContent = '寫入中...';
-      resultEl.textContent = '';
+    buttons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const blessingType = button.dataset.type;
+        await submitCheckin(blessingType);
+      });
+    });
+
+    async function submitCheckin(blessingType) {
+      if (isSubmitting) return;
+
+      if (!idToken) {
+        setMessage('尚未完成 LINE 登入，請重新開啟頁面。', 'error');
+        return;
+      }
+
+      isSubmitting = true;
+      disableButtons();
+
+      const label = blessingLabels[blessingType] || blessingType;
+      statusEl.textContent = `正在送出「${label}」...`;
+      setMessage('寫入中，請稍候...', 'normal');
 
       try {
         const response = await fetch(API_URL, {
@@ -121,27 +317,114 @@
           },
           body: JSON.stringify({
             idToken: idToken,
-            action: 'hello_button_clicked'
+            blessingType: blessingType
           })
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
-        if (!data.success) {
-          throw new Error(data.error || '寫入失敗');
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (error) {
+          throw new Error('API 回傳的不是 JSON：' + text.slice(0, 300));
         }
 
-        statusEl.textContent = '寫入成功';
-        resultEl.textContent = JSON.stringify(data, null, 2);
+        if (!data.success) {
+          throw new Error(data.error || '打卡失敗');
+        }
+
+        markButtonDone(blessingType);
+        saveLocalDoneState(blessingType);
+
+        statusEl.textContent = '打卡成功';
+        setMessage(`「${label}」打卡成功！`, 'success');
 
       } catch (error) {
-        statusEl.textContent = '寫入失敗';
-        resultEl.textContent = String(error);
+        statusEl.textContent = '打卡失敗';
+        setMessage(String(error), 'error');
 
       } finally {
-        submitButton.disabled = false;
+        isSubmitting = false;
+        enableButtons();
       }
-    });
+    }
+
+    function enableButtons() {
+      buttons.forEach(button => {
+        button.disabled = false;
+      });
+    }
+
+    function disableButtons() {
+      buttons.forEach(button => {
+        button.disabled = true;
+      });
+    }
+
+    function markButtonDone(blessingType) {
+      const button = document.querySelector(`.checkin-button[data-type="${blessingType}"]`);
+      if (!button) return;
+
+      button.classList.add('done');
+
+      const stateEl = button.querySelector('.button-state');
+      if (stateEl) {
+        stateEl.textContent = '已完成';
+      }
+    }
+
+    function getTodayKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLocalStorageKey() {
+      const userId = profile && profile.userId ? profile.userId : 'unknown';
+      return `fiveBlessingsDone:${getTodayKey()}:${userId}`;
+    }
+
+    function saveLocalDoneState(blessingType) {
+      try {
+        const key = getLocalStorageKey();
+        const current = JSON.parse(localStorage.getItem(key) || '[]');
+
+        if (!current.includes(blessingType)) {
+          current.push(blessingType);
+        }
+
+        localStorage.setItem(key, JSON.stringify(current));
+      } catch (error) {
+        // MVP：localStorage 失敗不影響打卡
+      }
+    }
+
+    function restoreLocalDoneState() {
+      try {
+        const key = getLocalStorageKey();
+        const doneTypes = JSON.parse(localStorage.getItem(key) || '[]');
+
+        doneTypes.forEach(type => {
+          markButtonDone(type);
+        });
+      } catch (error) {
+        // MVP：localStorage 失敗不影響主要功能
+      }
+    }
+
+    function setMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.classList.remove('success', 'error');
+
+      if (type === 'success') {
+        messageEl.classList.add('success');
+      } else if (type === 'error') {
+        messageEl.classList.add('error');
+      }
+    }
 
     main();
   </script>
